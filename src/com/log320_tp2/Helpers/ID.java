@@ -4,5 +4,5 @@ import java.util.UUID;
 
 public interface ID
 {
-    UUID ID = null;
+    UUID ID = UUID.randomUUID();
 }
