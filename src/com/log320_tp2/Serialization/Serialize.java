@@ -12,11 +12,17 @@ public class Serialize
     {
         var list = new ArrayList<Tuple<String, Integer>>();
 
-
         for (byte b: bytes)
         {
-
+            if(list.contains(String.valueOf(b)))
+            {
+                ++list.get(list.indexOf(String.valueOf(b))).Item2;
+            }
+            else
+            {
+                list.add(new Tuple(String.valueOf(b),1));
+            }
         }
-        return null;
+        return list;
     }
 }
