@@ -15,8 +15,7 @@ public class Node<T extends ID> implements IEquatable<Node>, ID
     private UUID ID;
     private T Value;
 
-    public Node()
-    {
+    public Node() throws Exception {
         this.ID = UUID.randomUUID();
     }
 

@@ -1,5 +1,7 @@
 package com.log320_tp2.DataStructure;
 
+import com.log320_tp2.Helpers.Actions;
+
 public class Heap<T>
 {
     public void Insert(T value) throws Exception
