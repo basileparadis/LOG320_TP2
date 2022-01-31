@@ -23,6 +23,6 @@ public class Menu
 
         for (var tuple: tuples) heap.Insert(new Node(tuple));
 
-        fileWriter.Write(nomFichierEntre, b);
+        fileWriter.Write(nomFichierSortie, b);
     }
 }
