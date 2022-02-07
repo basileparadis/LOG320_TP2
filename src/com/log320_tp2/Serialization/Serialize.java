@@ -23,6 +23,7 @@ public class Serialize
             }
             else map.put(key, new Tuple<>(key, 1));
         }
+
         return new ArrayList(map.values());
     }
 }

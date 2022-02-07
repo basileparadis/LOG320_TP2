@@ -1,20 +1,18 @@
 package com.log320_tp2.DataStructure;
 
-import com.log320_tp2.Helpers.Actions;
+import com.log320_tp2.Helpers.Tuple;
 
 public class Heap
 {
-    public void Build(Node<int, string>[] array)
-    {
-        for (int i = array.length/2; i > 1; i--)
-        {
-            MaxHeapify(array, i);
-        }
-    }
+    private Node<Tuple<Character, Integer>>[] internalCollection;
 
-    public void Insert(double value) throws Exception
+    public void Build(Tuple<Character, Integer>[] array)
     {
+        internalCollection = new Node[array.length];
 
+        for (int i = 0; i < array.length; i++) internalCollection[i] = new Node(array[i]);
+
+        for (int i = array.length/2; i > 1; i--) MaxHeapify(internalCollection, i);
     }
 
     public void Delete(int value) throws Exception
@@ -32,14 +30,17 @@ public class Heap
         return null;
     }
 
-    private void MaxHeapify(double[] array, int i)
+    private void MaxHeapify(Node<Tuple<Character, Integer>>[] array, int i)
     {
         var left = 2*i;
         var right = 2*i + 1;
 
-        var largest = left <= array.length && array[left] > array[right] ?  left : i;
+        var leftValue = array[left].GetValue().Item2;
+        var rightValue = array[right].GetValue().Item2;
 
-        if(right <= array.length && array[right] > array[largest]) largest = right;
+        var largest = left <= array.length &&  leftValue> rightValue ?  left : i;
+
+        if(right <= array.length && rightValue > array[largest].GetValue().Item2) largest = right;
 
         if(largest != i)
         {
