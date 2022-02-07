@@ -1,5 +1,7 @@
 package com.log320_tp2.Serialization;
 
+import com.log320_tp2.DataStructure.HuffmanHeap;
+import com.log320_tp2.DataStructure.Node;
 import com.log320_tp2.Helpers.Tuple;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,5 +27,17 @@ public class Serialize
         }
 
         return new ArrayList(map.values());
+    }
+
+    public String Encode(byte[] bytes, HuffmanHeap heap)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (var bit: bytes)
+        {
+            stringBuilder.append(heap.GetCode((char) bit));
+        }
+
+        return stringBuilder.toString();
     }
 }
