@@ -8,6 +8,10 @@ import java.util.concurrent.RunnableFuture;
 
 public class Node<T extends ID> implements IEquatable<Node>, ID
 {
+    public Node Parent;
+    public Node LeftChild;
+    public Node RightChild;
+
     private UUID ID;
     private T Value;
 
