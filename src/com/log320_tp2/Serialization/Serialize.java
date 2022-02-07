@@ -1,23 +1,18 @@
 package com.log320_tp2.Serialization;
 
 import com.log320_tp2.Helpers.Tuple;
-
-import java.io.File;
-import java.nio.file.Files;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
-import java.util.Map;
 
 public class Serialize
 {
-    public ArrayList<Tuple<String, Integer>> CreerTableFrequences(byte[] bytes)
+    public ArrayList<Tuple<Character, Integer>> CreerTableFrequences(byte[] bytes)
     {
-        var map = new HashMap<String, Tuple<String, Integer>>();
+        var map = new HashMap<Character, Tuple<Character, Integer>>();
 
-        for (byte b: bytes)
+        for (byte b : bytes)
         {
-            var key = String.valueOf(b);
+            var key = (char)b;
 
             if(map.containsKey(key))
             {
@@ -26,11 +21,8 @@ public class Serialize
 
                 map.replace(key, value);
             }
-            else
-            {
-                map.put(key, new Tuple<>(key, 1));
-            }
+            else map.put(key, new Tuple<>(key, 1));
         }
-        return map.values();
+        return new ArrayList(map.values());
     }
 }
