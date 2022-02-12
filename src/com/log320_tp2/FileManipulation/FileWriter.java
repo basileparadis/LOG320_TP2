@@ -9,6 +9,8 @@ public class FileWriter
 {
     public void Write(String path, byte[] bytes) throws IOException
     {
-        Files.write(Paths.get(path), bytes);
+        FileOutputStream fileOutputStream = new FileOutputStream(path);
+
+        fileOutputStream.write(bytes);
     }
 }

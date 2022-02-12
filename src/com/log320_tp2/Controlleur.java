@@ -20,10 +20,10 @@ public class Controlleur
 
         var tableFrequences = serialize.CreerTableFrequences(bytes);
 
-        var queue = new PriorityQueue<Tuple<Character, Integer>>((o1, o2) ->
+        var queue = new PriorityQueue<Tuple<String, Integer>>((o1, o2) ->
         {
-            if(o1.Item2 > o2.Item2) return 1;
-            if(o1.Item2 < o2.Item2) return -1;
+            if(o1.Item2 > o2.Item2) return -1;
+            if(o1.Item2 < o2.Item2) return 1;
             return 0;
         });
 
@@ -33,6 +33,7 @@ public class Controlleur
 
         fileWriter.Write(nomFichierSortie, serialize.Encode(bytes, huffmanHeap).getBytes());
     }
+
 
     public static void Decompress()
     {
