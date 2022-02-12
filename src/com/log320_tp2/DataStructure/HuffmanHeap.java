@@ -3,15 +3,16 @@ package com.log320_tp2.DataStructure;
 import com.log320_tp2.Helpers.Tuple;
 import com.log320_tp2.Huffman;
 
+import java.awt.print.Printable;
 import java.util.*;
 
 public class HuffmanHeap
 {
-    public ArrayList<Tuple<Character, Integer>> Heap;
+    public ArrayList<Tuple<String, Integer>> Heap;
 
-    public void Build(PriorityQueue<Tuple<Character, Integer>> queue)
+    public void Build(PriorityQueue<Tuple<String, Integer>> queue)
     {
-        Heap = new ArrayList<Tuple<Character, Integer>>();
+        Heap = new ArrayList<Tuple<String, Integer>>();
 
         var valuePrior =  queue.remove();
 
@@ -19,29 +20,47 @@ public class HuffmanHeap
 
         while (!queue.isEmpty())
         {
-            var newValue = new Tuple<Character, Integer>(null ,valuePrior.Item2 + queue.remove().Item2);
+            var value = queue.remove();
 
-            Heap.add(newValue);
+            var emptyValue = new Tuple<String , Integer>("empty" ,valuePrior.Item2 + value.Item2);
 
-            MaxHeapify(Heap, 0);
+            Heap.add(emptyValue);
 
-            valuePrior = newValue;
+            Heap.add(value);
+
+            valuePrior = emptyValue;
+        }
+
+        for (int i = Heap.size()/2; i > 0; i--) {
+            MaxHeapify(Heap, i);
+        }
+
+        Heap.removeIf(tuple->tuple.Item1.equals("empty"));
+
+        var emptyValue = new Tuple<String , Integer>("empty" , Integer.MAX_VALUE);
+
+        Heap.add(emptyValue);
+
+        for (int i = Heap.size()/2; i > 0; i--) {
+            MaxHeapify(Heap, i);
         }
     }
 
-    private void MaxHeapify(ArrayList<Tuple<Character, Integer>> array, int i)
+    private void MaxHeapify(ArrayList<Tuple<String, Integer>> array, int i)
     {
         var left = 2*i;
         var right = 2*i + 1;
 
-        var leftValue = array.get(left).Item2;
-        var rightValue = array.get(right).Item2;
+        if(array.size()<left || array.size()<right) return;
 
-        var largest = left <= array.size() &&  leftValue> rightValue ?  left : i;
+        var leftValue = array.get(left-1).Item2;
+        var rightValue = array.get(right-1).Item2;
+
+        var largest = left <= array.size() &&  leftValue > rightValue ?  left : i;
 
         if(right <= array.size() && rightValue > array.get(largest).Item2) largest = right;
 
-        if(largest != i)
+        if(largest != i && array.size() < largest)
         {
             var temp = array.get(i);
 
@@ -52,39 +71,41 @@ public class HuffmanHeap
         }
     }
 
-    private ArrayList<Tuple<Character, String>> GetLeaves(int index, StringBuilder binaryValue)
+    public HashMap<String, String> GetEncodedValues()
     {
-        var list = new ArrayList<Tuple<Character, String>>();
+        var array = GetLeaves(0, "");
 
-        var left = 2*index;
-        var right = 2*index + 1;
-
-        var value = Heap.get(index);
-
-        if(value != null && value.Item1 == null)
-        {
-            list.addAll(GetLeaves(left, binaryValue.append("1")));
-            list.addAll(GetLeaves(right, binaryValue.append("0")));
-        }
-        else if(value != null && value.Item1 != null)
-        {
-            list.add(new Tuple<Character, String>(value.Item1, binaryValue.toString()));
-        }
-
-        return list;
-    }
-
-
-    public HashMap<String, Character> GetEncodedValues()
-    {
-        var array = GetLeaves(0, new StringBuilder());
-        var map = new HashMap<String, Character>();
+        var map = new HashMap<String, String>();
 
         for (var tuple : array)
         {
-            map.put(tuple.Item2, tuple.Item1);
+            map.put(tuple.Item1, tuple.Item2);
         }
 
         return map;
+    }
+
+    private ArrayList<Tuple<String, String>> GetLeaves(int index, String binaryValue)
+    {
+        if(index ==0) index++;
+
+        var list = new ArrayList<Tuple<String, String>>();
+
+        var left = (2*index);
+        var right = 2*index+1;
+
+        if(index > Heap.size()) return list;
+
+        var value = Heap.get(index-1);
+
+
+        if(value != null)
+        {
+            list.add(new Tuple<String, String>(value.Item1, binaryValue));
+            list.addAll(GetLeaves(left, binaryValue + "0"));
+            list.addAll(GetLeaves(right, binaryValue + "1"));
+
+        }
+        return list;
     }
 }
