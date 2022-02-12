@@ -31,12 +31,30 @@ public class Serialize
 
     public String Encode(byte[] bytes, HuffmanHeap heap)
     {
-        StringBuilder stringBuilder = new StringBuilder();
+        var codex = heap.GetEncodedValues();
+
+        var header = SerializeHeader(codex);
+
+        StringBuilder stringBuilder = new StringBuilder(header);
 
         for (var bit: bytes)
         {
-            stringBuilder.append(heap.GetCode((char) bit));
+            stringBuilder.append(codex.get((char) bit) + " ");
         }
+
+        return stringBuilder.toString();
+    }
+
+    private String SerializeHeader(HashMap<String, Character> codex)
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (var value: codex.keySet())
+        {
+            stringBuilder.append(value+":"+codex.get(value));
+        }
+
+        stringBuilder.append("&");
 
         return stringBuilder.toString();
     }

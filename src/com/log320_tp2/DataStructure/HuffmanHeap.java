@@ -3,110 +3,88 @@ package com.log320_tp2.DataStructure;
 import com.log320_tp2.Helpers.Tuple;
 import com.log320_tp2.Huffman;
 
-import java.util.HashMap;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class HuffmanHeap
 {
-    //private Node<Tuple<Character, Integer>>[] internalCollection;
-
-    private HashMap<Character, Node> internalCollectionReccurence;
-
-    private HashMap<Character, String> internalCollectionPosition;
-
-    //public Node<Tuple<Character, Integer>>[] GetInternalCollection() { return internalCollection; }
-
-    public HashMap<Character, Integer> GetInternalCollection() { return internalCollectionReccurence; }
+    public ArrayList<Tuple<Character, Integer>> Heap;
 
     public void Build(PriorityQueue<Tuple<Character, Integer>> queue)
     {
-        //internalCollection = new Node[queue.size()];
+        Heap = new ArrayList<Tuple<Character, Integer>>();
 
-        Huffman(null, queue);
+        var valuePrior =  queue.remove();
 
-        //for (int i = 0; i < queue.size(); i++) internalCollection[i] = new Node(qu[i]);
+        Heap.add(valuePrior);
 
-        //for (int i = array.length/2; i > 1; i--) MaxHeapify(internalCollection, i);
+        while (!queue.isEmpty())
+        {
+            var newValue = new Tuple<Character, Integer>(null ,valuePrior.Item2 + queue.remove().Item2);
+
+            Heap.add(newValue);
+
+            MaxHeapify(Heap, 0);
+
+            valuePrior = newValue;
+        }
     }
 
-    public void Delete(int value) throws Exception
-    {
-
-    }
-
-    public void InOrderWalk() throws Exception
-    {
-
-    }
-
-    public double Pop() throws Exception
-    {
-        return null;
-    }
-
-    private void MaxHeapify(Node<Tuple<Character, Integer>>[] array, int i)
+    private void MaxHeapify(ArrayList<Tuple<Character, Integer>> array, int i)
     {
         var left = 2*i;
         var right = 2*i + 1;
 
-        var leftValue = array[left].GetValue().Item2;
-        var rightValue = array[right].GetValue().Item2;
+        var leftValue = array.get(left).Item2;
+        var rightValue = array.get(right).Item2;
 
-        var largest = left <= array.length &&  leftValue> rightValue ?  left : i;
+        var largest = left <= array.size() &&  leftValue> rightValue ?  left : i;
 
-        if(right <= array.length && rightValue > array[largest].GetValue().Item2) largest = right;
+        if(right <= array.size() && rightValue > array.get(largest).Item2) largest = right;
 
         if(largest != i)
         {
-            var temp = array[i];
+            var temp = array.get(i);
 
-            array[i] = array[largest];
-            array[largest] = temp;
+            array.set(i, array.get(largest));
+            array.set(largest, temp);
 
             MaxHeapify(array, largest);
         }
     }
 
-    private void Huffman(Node node, PriorityQueue<Tuple<Character, Integer>> queue)
+    private ArrayList<Tuple<Character, String>> GetLeaves(int index, StringBuilder binaryValue)
     {
-        if(queue.isEmpty()) return;
-        if(node == null)
+        var list = new ArrayList<Tuple<Character, String>>();
+
+        var left = 2*index;
+        var right = 2*index + 1;
+
+        var value = Heap.get(index);
+
+        if(value != null && value.Item1 == null)
         {
-            var value =  queue.remove();
-            node = new Node(value);
-            internalCollectionReccurence.put(value.Item1, node);
+            list.addAll(GetLeaves(left, binaryValue.append("1")));
+            list.addAll(GetLeaves(right, binaryValue.append("0")));
+        }
+        else if(value != null && value.Item1 != null)
+        {
+            list.add(new Tuple<Character, String>(value.Item1, binaryValue.toString()));
         }
 
-        Node child = new Node(queue.remove());
-        Node root = new Node(new Tuple<Character, Integer>(null, ((Tuple<Character, Integer>)child.GetValue()).Item2));
-
-        node.Parent = child.Parent = root;
-        root.LeftChild = node;
-        root.RightChild = child;
-
-        Huffman(root, queue);
+        return list;
     }
 
-    public String GetCode(char c)
+
+    public HashMap<String, Character> GetEncodedValues()
     {
-        if(internalCollectionPosition.containsKey(c))return internalCollectionPosition.get(c);
+        var array = GetLeaves(0, new StringBuilder());
+        var map = new HashMap<String, Character>();
 
-        if(internalCollectionReccurence.containsKey(c))
+        for (var tuple : array)
         {
-            StringBuilder position = new StringBuilder();
-
-            Node current = internalCollectionReccurence.get(c);
-            Node parent = current.Parent;
-
-            while (parent != null)
-            {
-                position.append(parent.RightChild.equals(current) ? '1' : '0');
-                parent = parent.Parent;
-                current = parent;
-            }
-
-            internalCollectionPosition.put(c, position.toString());
+            map.put(tuple.Item2, tuple.Item1);
         }
-    }
 
+        return map;
+    }
 }
