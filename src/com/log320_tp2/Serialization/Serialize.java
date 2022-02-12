@@ -8,22 +8,22 @@ import java.util.HashMap;
 
 public class Serialize
 {
-    public ArrayList<Tuple<Character, Integer>> CreerTableFrequences(byte[] bytes)
+    public ArrayList<Tuple<String, Integer>> CreerTableFrequences(byte[] bytes)
     {
-        var map = new HashMap<Character, Tuple<Character, Integer>>();
+        var map = new HashMap<String, Tuple<String, Integer>>();
 
         for (byte b : bytes)
         {
-            var key = (char)b;
+            var key = String.valueOf((char)b);
 
             if(map.containsKey(key))
             {
                 var value = map.get(key);
                 value.Item2++;
 
-                map.replace(key, value);
+                map.replace(String.valueOf(key), value);
             }
-            else map.put(key, new Tuple<>(key, 1));
+            else map.put(String.valueOf(key), new Tuple(key, 1));
         }
 
         return new ArrayList(map.values());
@@ -39,19 +39,22 @@ public class Serialize
 
         for (var bit: bytes)
         {
-            stringBuilder.append(codex.get((char) bit) + " ");
+            char value = (char) bit;
+            var encodedValue = codex.get(String.valueOf(value));
+
+            stringBuilder.append(encodedValue);
         }
 
         return stringBuilder.toString();
     }
 
-    private String SerializeHeader(HashMap<String, Character> codex)
+    private String SerializeHeader(HashMap<String, String> codex)
     {
         StringBuilder stringBuilder = new StringBuilder();
 
         for (var value: codex.keySet())
         {
-            stringBuilder.append(value+":"+codex.get(value));
+            stringBuilder.append(value+":"+codex.get(value)+",");
         }
 
         stringBuilder.append("&");
