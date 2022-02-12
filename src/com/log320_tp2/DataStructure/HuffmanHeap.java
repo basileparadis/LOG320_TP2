@@ -36,6 +36,14 @@ public class HuffmanHeap
         }
 
         Heap.removeIf(tuple->tuple.Item1.equals("empty"));
+
+        var emptyValue = new Tuple<String , Integer>("empty" , Integer.MAX_VALUE);
+
+        Heap.add(emptyValue);
+
+        for (int i = Heap.size()/2; i > 0; i--) {
+            MaxHeapify(Heap, i);
+        }
     }
 
     private void MaxHeapify(ArrayList<Tuple<String, Integer>> array, int i)
@@ -43,7 +51,7 @@ public class HuffmanHeap
         var left = 2*i;
         var right = 2*i + 1;
 
-        if(array.size()<left+1 || array.size()<right+1) return;
+        if(array.size()<left || array.size()<right) return;
 
         var leftValue = array.get(left-1).Item2;
         var rightValue = array.get(right-1).Item2;
@@ -52,7 +60,7 @@ public class HuffmanHeap
 
         if(right <= array.size() && rightValue > array.get(largest).Item2) largest = right;
 
-        if(largest != i)
+        if(largest != i && array.size() < largest)
         {
             var temp = array.get(i);
 
@@ -65,7 +73,7 @@ public class HuffmanHeap
 
     public HashMap<String, String> GetEncodedValues()
     {
-        var array = GetLeaves(0, "0");
+        var array = GetLeaves(0, "");
 
         var map = new HashMap<String, String>();
 
@@ -86,7 +94,7 @@ public class HuffmanHeap
         var left = (2*index);
         var right = 2*index+1;
 
-        if(index >= Heap.size()) return list;
+        if(index > Heap.size()) return list;
 
         var value = Heap.get(index-1);
 
@@ -94,8 +102,8 @@ public class HuffmanHeap
         if(value != null)
         {
             list.add(new Tuple<String, String>(value.Item1, binaryValue));
-            list.addAll(GetLeaves(left, binaryValue + ""));
-            list.addAll(GetLeaves(right, binaryValue + ""));
+            list.addAll(GetLeaves(left, binaryValue + "0"));
+            list.addAll(GetLeaves(right, binaryValue + "1"));
 
         }
         return list;
