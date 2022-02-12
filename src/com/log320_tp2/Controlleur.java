@@ -9,7 +9,7 @@ import java.util.PriorityQueue;
 
 public class Controlleur
 {
-    public void Compress(String nomFichierEntre, String nomFichierSortie) throws Exception
+    public static void Compress(String nomFichierEntre, String nomFichierSortie) throws Exception
     {
         var fileReader = new FileReader();
         var fileWriter = new FileWriter();
@@ -18,7 +18,7 @@ public class Controlleur
 
         var bytes = fileReader.Read(nomFichierEntre);
 
-        var tuples = serialize.CreerTableFrequences(bytes);
+        var tableFrequences = serialize.CreerTableFrequences(bytes);
 
         var queue = new PriorityQueue<Tuple<Character, Integer>>((o1, o2) ->
         {
@@ -27,14 +27,14 @@ public class Controlleur
             return 0;
         });
 
-        queue.addAll(tuples);
+        queue.addAll(tableFrequences);
 
         huffmanHeap.Build(queue);
 
         fileWriter.Write(nomFichierSortie, serialize.Encode(bytes, huffmanHeap).getBytes());
     }
 
-    public void Decompress()
+    public static void Decompress()
     {
         var fileReader = new FileReader();
         var fileWriter = new FileWriter();
@@ -44,3 +44,4 @@ public class Controlleur
 
     }
 }
+
