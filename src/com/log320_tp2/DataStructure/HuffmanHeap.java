@@ -40,10 +40,6 @@ public class HuffmanHeap
         var emptyValue = new Tuple<String , Integer>("empty" , Integer.MAX_VALUE);
 
         Heap.add(emptyValue);
-
-        for (int i = Heap.size()/2; i > 0; i--) {
-            MaxHeapify(Heap, i);
-        }
     }
 
     private void MaxHeapify(ArrayList<Tuple<String, Integer>> array, int i)
