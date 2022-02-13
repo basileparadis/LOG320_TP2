@@ -1,9 +1,7 @@
 package com.log320_tp2.DataStructure;
 
 import com.log320_tp2.Helpers.Tuple;
-import com.log320_tp2.Huffman;
 
-import java.awt.print.Printable;
 import java.util.*;
 
 public class HuffmanHeap
@@ -14,32 +12,32 @@ public class HuffmanHeap
     {
         Heap = new ArrayList<Tuple<String, Integer>>();
 
-        var valuePrior =  queue.remove();
+        var queueEmpty =  new PriorityQueue<Tuple<String, Integer>>(queue);
 
-        Heap.add(valuePrior);
+        var valuePrior =  queueEmpty.remove();
 
-        while (!queue.isEmpty())
+        while (!queueEmpty.isEmpty())
         {
-            var value = queue.remove();
+            var value = queueEmpty.remove();
 
             var emptyValue = new Tuple<String , Integer>("empty" ,valuePrior.Item2 + value.Item2);
 
             Heap.add(emptyValue);
 
-            Heap.add(value);
-
             valuePrior = emptyValue;
         }
 
-        for (int i = Heap.size()/2; i > 0; i--) {
+        while (!queue.isEmpty())
+        {
+            var value = queue.remove();
+
+            Heap.add(value);
+        }
+
+        for (int i = Heap.size()/2; i >= 0; i--) {
             MaxHeapify(Heap, i);
         }
 
-        Heap.removeIf(tuple->tuple.Item1.equals("empty"));
-
-        var emptyValue = new Tuple<String , Integer>("empty" , Integer.MAX_VALUE);
-
-        Heap.add(emptyValue);
     }
 
     private void MaxHeapify(ArrayList<Tuple<String, Integer>> array, int i)
@@ -47,16 +45,17 @@ public class HuffmanHeap
         var left = 2*i;
         var right = 2*i + 1;
 
-        if(array.size()<left || array.size()<right) return;
+        int largest = 0;
 
-        var leftValue = array.get(left-1).Item2;
-        var rightValue = array.get(right-1).Item2;
+        if(left < array.size() && array.get(left).Item2 > array.get(i).Item2)
+            largest = left;
+        else
+            largest = i;
 
-        var largest = left <= array.size() &&  leftValue > rightValue ?  left : i;
+        if(right < array.size() && array.get(right).Item2 > array.get(largest).Item2)
+            largest = right;
 
-        if(right <= array.size() && rightValue > array.get(largest).Item2) largest = right;
-
-        if(largest != i && array.size() < largest)
+        if(largest != i)
         {
             var temp = array.get(i);
 
@@ -90,17 +89,21 @@ public class HuffmanHeap
         var left = (2*index);
         var right = 2*index+1;
 
+        boolean hasLeftChild = left < Heap.size();
+        boolean hasRightChild = right < Heap.size();
+
         if(index > Heap.size()) return list;
 
         var value = Heap.get(index-1);
 
-
-        if(value != null)
+        if(value != null && !value.Item1.equals("empty"))
         {
             list.add(new Tuple<String, String>(value.Item1, binaryValue));
+        }
+        else if(value !=null)
+        {
             list.addAll(GetLeaves(left, binaryValue + "0"));
             list.addAll(GetLeaves(right, binaryValue + "1"));
-
         }
         return list;
     }
