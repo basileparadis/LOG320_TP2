@@ -38,6 +38,27 @@ public class Controlleur
     }
 
 
+    public static String Compress(String stringInput) throws Exception
+    {
+        var serialize = new Serialize();
+        var huffmanHeap = new HuffmanHeap();
+
+        var tableFrequences = serialize.CreerTableFrequences(stringInput.getBytes());
+
+        var queue = new PriorityQueue<Tuple<String, Integer>>((o1, o2) ->
+        {
+            if(o1.Item2 > o2.Item2) return -1;
+            if(o1.Item2 < o2.Item2) return 1;
+            return 0;
+        });
+
+        queue.addAll(tableFrequences);
+
+        huffmanHeap.Build(queue);
+
+        return serialize.Encode(stringInput.getBytes(), huffmanHeap);
+    }
+
     public static void Decompress(String nomFichierEntre, String nomFichierSortie) throws IOException {
         var fileReader = new FileReader();
         var fileWriter = new FileWriter();
@@ -47,6 +68,14 @@ public class Controlleur
 
         var value = deserialize.Deserialize(new String(bytes));
         fileWriter.Write(nomFichierSortie, value);
+    }
+
+    public static String Decompress(String stringInput) throws IOException {
+        var deserialize = new Deserialize();
+
+        var bytes = stringInput.getBytes();
+
+        return deserialize.Deserialize(new String(bytes));
     }
 }
 

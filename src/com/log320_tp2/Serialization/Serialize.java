@@ -11,11 +11,14 @@ public class Serialize
     public ArrayList<Tuple<String, Integer>> CreerTableFrequences(byte[] bytes)
     {
         var map = new HashMap<String, Tuple<String, Integer>>();
-
+        int i=0;
         for (byte b : bytes)
         {
-            var key = String.valueOf((char)b);
-
+            var key = String.valueOf(b);
+            ++i;
+            if(i==1043) {
+                boolean test = true;
+            }
             if(map.containsKey(key))
             {
                 var value = map.get(key);
