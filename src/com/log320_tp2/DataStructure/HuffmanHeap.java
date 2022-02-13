@@ -12,19 +12,17 @@ public class HuffmanHeap
     {
         Heap = new ArrayList<Tuple<String, Integer>>();
 
-        var valuePrior =  queue.remove();
+        var queueEmpty =  new PriorityQueue<Tuple<String, Integer>>(queue);
 
-        Heap.add(valuePrior);
+        var valuePrior =  queueEmpty.remove();
 
-        while (!queue.isEmpty())
+        while (!queueEmpty.isEmpty())
         {
-            var value = queue.remove();
+            var value = queueEmpty.remove();
 
             var emptyValue = new Tuple<String , Integer>("empty" ,valuePrior.Item2 + value.Item2);
 
             Heap.add(emptyValue);
-
-            Heap.add(value);
 
             valuePrior = emptyValue;
         }
@@ -33,11 +31,17 @@ public class HuffmanHeap
             MaxHeapify(Heap, i);
         }
 
-        Heap.removeIf(tuple->tuple.Item1.equals("empty"));
+        while (!queue.isEmpty())
+        {
+            var value = queue.remove();
 
-        var emptyValue = new Tuple<String , Integer>("empty" , Integer.MAX_VALUE);
+            Heap.add(value);
+        }
 
-        Heap.add(0, emptyValue);
+        for (int i = Heap.size()/2; i > 0; i--) {
+            MaxHeapify(Heap, i);
+        }
+
     }
 
     private void MaxHeapify(ArrayList<Tuple<String, Integer>> array, int i)
@@ -93,12 +97,14 @@ public class HuffmanHeap
         var value = Heap.get(index-1);
 
 
-        if(value != null)
+        if(value != null && !value.Item1.equals("empty"))
         {
             list.add(new Tuple<String, String>(value.Item1, binaryValue));
+        }
+        else if(value !=null)
+        {
             list.addAll(GetLeaves(left, binaryValue + "0"));
             list.addAll(GetLeaves(right, binaryValue + "1"));
-
         }
         return list;
     }

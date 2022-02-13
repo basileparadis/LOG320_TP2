@@ -29,13 +29,9 @@ public class Serialize
         return new ArrayList(map.values());
     }
 
-    public String Encode(ArrayList<Character> chars, HuffmanHeap heap)
+    public String Encode(ArrayList<Character> chars, HashMap<String, String> codex)
     {
-        var codex = heap.GetEncodedValues();
-
-        var header = SerializeHeader(codex);
-
-        StringBuilder stringBuilder = new StringBuilder(header);
+        StringBuilder stringBuilder = new StringBuilder();
 
         for (var string: chars)
         {
@@ -47,16 +43,17 @@ public class Serialize
         return stringBuilder.toString();
     }
 
-    private String SerializeHeader(HashMap<String, String> codex)
+    public String SerializeHeader(HashMap<String, String> codex, int bytesWritten)
     {
         StringBuilder stringBuilder = new StringBuilder();
 
+        stringBuilder.append("&&");
+
         for (var value: codex.keySet())
         {
-            stringBuilder.append(value+":"+codex.get(value)+",,");
+            stringBuilder.append(value+":!:"+codex.get(value)+",,");
         }
-
-        stringBuilder.append("&&");
+        stringBuilder.append(String.valueOf(bytesWritten)+",,");
 
         return stringBuilder.toString();
     }
