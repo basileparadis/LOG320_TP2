@@ -55,7 +55,6 @@ public class Controlleur
 
         var codex = fileReader.ReadDecompress(nomFichierEntre);
 
-
         StringBuilder stringBuilder = new StringBuilder();
 
         for (var code:codex) stringBuilder.append(code);

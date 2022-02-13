@@ -27,10 +27,6 @@ public class HuffmanHeap
             valuePrior = emptyValue;
         }
 
-        for (int i = Heap.size()/2; i > 0; i--) {
-            MaxHeapify(Heap, i);
-        }
-
         while (!queue.isEmpty())
         {
             var value = queue.remove();
@@ -38,7 +34,7 @@ public class HuffmanHeap
             Heap.add(value);
         }
 
-        for (int i = Heap.size()/2; i > 0; i--) {
+        for (int i = Heap.size()/2; i >= 0; i--) {
             MaxHeapify(Heap, i);
         }
 
@@ -49,16 +45,17 @@ public class HuffmanHeap
         var left = 2*i;
         var right = 2*i + 1;
 
-        if(array.size()<left || array.size()<right) return;
+        int largest = 0;
 
-        var leftValue = array.get(left-1).Item2;
-        var rightValue = array.get(right-1).Item2;
+        if(left < array.size() && array.get(left).Item2 > array.get(i).Item2)
+            largest = left;
+        else
+            largest = i;
 
-        var largest = left <= array.size() &&  leftValue > rightValue ?  left : i;
+        if(right < array.size() && array.get(right).Item2 > array.get(largest).Item2)
+            largest = right;
 
-        if(right <= array.size() && rightValue > array.get(largest).Item2) largest = right;
-
-        if(largest != i && array.size() < largest)
+        if(largest != i)
         {
             var temp = array.get(i);
 
@@ -92,10 +89,12 @@ public class HuffmanHeap
         var left = (2*index);
         var right = 2*index+1;
 
+        boolean hasLeftChild = left < Heap.size();
+        boolean hasRightChild = right < Heap.size();
+
         if(index > Heap.size()) return list;
 
         var value = Heap.get(index-1);
-
 
         if(value != null && !value.Item1.equals("empty"))
         {

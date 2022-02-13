@@ -1,17 +1,14 @@
 package com.log320_tp2.Serialization;
 
-import com.log320_tp2.DataStructure.Node;
 import com.log320_tp2.Helpers.Tuple;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.UUID;
 
 public class Deserialize
 {
     public String Deserialize(ArrayList<Character> codes, String text)
     {
-
         var codex = BuildCodex(text);
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -19,7 +16,7 @@ public class Deserialize
 
         for (int i = 0; i < codex.Item2; i++)
         {
-            var codeValue = String.valueOf(codes.get(i)).hashCode() == 0? 0 : 1;
+            var codeValue = codes.get(i).hashCode() == 0? 0 : 1;
 
             codeBuilder.append(codeValue);
 
@@ -27,6 +24,7 @@ public class Deserialize
             {
                 var value = codex.Item1.get(codeBuilder.toString());
                 stringBuilder.append(value);
+
                 codeBuilder = new StringBuilder();
             }
         }
@@ -36,7 +34,7 @@ public class Deserialize
 
     private Tuple<HashMap<String, String>, Integer> BuildCodex(String header)
     {
-        var splitHeader = header.split(",,");
+        var splitHeader = header.split(",!,");
         var codex = new HashMap<String, String>();
 
         for (int i = 0; i < splitHeader.length-1; i++)

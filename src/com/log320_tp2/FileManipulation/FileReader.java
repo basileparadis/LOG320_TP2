@@ -48,8 +48,7 @@ public class FileReader
 
                 if(counter == 2) reachedCodex = true;
             }
-
-            if (reachedCodex)
+            else if (reachedCodex)
                 chars.add((char)buffReader.read());
         }
 
@@ -61,7 +60,7 @@ public class FileReader
     {
         BitInputStream bitInputStream = new BitInputStream(path);
 
-        var chars = new ArrayList<Character>();
+        var chars = new ArrayList<Character>(10000000);
 
         while (true) {
             var value = bitInputStream.readBit();

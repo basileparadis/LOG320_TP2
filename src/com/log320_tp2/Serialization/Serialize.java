@@ -37,7 +37,7 @@ public class Serialize
         {
             var encodedValue = codex.get(string.toString());
 
-            stringBuilder.append(encodedValue + "");
+            stringBuilder.append(encodedValue);
         }
 
         return stringBuilder.toString();
@@ -51,9 +51,9 @@ public class Serialize
 
         for (var value: codex.keySet())
         {
-            stringBuilder.append(value+":!:"+codex.get(value)+",,");
+            stringBuilder.append(value+":!:"+codex.get(value)+",!,");
         }
-        stringBuilder.append(String.valueOf(bytesWritten)+",,");
+        stringBuilder.append(String.valueOf(bytesWritten)+",!,");
 
         return stringBuilder.toString();
     }
