@@ -42,7 +42,7 @@ public class Serialize
             char value = (char) bit;
             var encodedValue = codex.get(String.valueOf(value));
 
-            stringBuilder.append(encodedValue);
+            stringBuilder.append(encodedValue + " ");
         }
 
         return stringBuilder.toString();
@@ -54,10 +54,10 @@ public class Serialize
 
         for (var value: codex.keySet())
         {
-            stringBuilder.append(value+":"+codex.get(value)+",");
+            stringBuilder.append(value+":"+codex.get(value)+",,");
         }
 
-        stringBuilder.append("&");
+        stringBuilder.append("&&");
 
         return stringBuilder.toString();
     }

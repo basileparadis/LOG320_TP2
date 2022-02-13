@@ -1,5 +1,7 @@
 package com.log320_tp2;
 
+import java.io.IOException;
+
 public class Huffman{
 
     // Ne pas changer ces fonctions, elles seront utilisées pour tester votre programme
@@ -7,9 +9,8 @@ public class Huffman{
         Controlleur.Compress(nomFichierEntre, nomFichierSortie);
     }
 
-    public void Decompresser(String nomFichierEntre, String nomFichierSortie)
-    {
-
+    public void Decompresser(String nomFichierEntre, String nomFichierSortie) throws IOException {
+        Controlleur.Decompress(nomFichierEntre, nomFichierSortie);
     }
 
 }

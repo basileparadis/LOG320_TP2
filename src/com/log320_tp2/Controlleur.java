@@ -4,7 +4,10 @@ import com.log320_tp2.DataStructure.HuffmanHeap;
 import com.log320_tp2.FileManipulation.FileReader;
 import com.log320_tp2.FileManipulation.FileWriter;
 import com.log320_tp2.Helpers.Tuple;
+import com.log320_tp2.Serialization.Deserialize;
 import com.log320_tp2.Serialization.Serialize;
+
+import java.io.IOException;
 import java.util.PriorityQueue;
 
 public class Controlleur
@@ -31,18 +34,19 @@ public class Controlleur
 
         huffmanHeap.Build(queue);
 
-        fileWriter.Write(nomFichierSortie, serialize.Encode(bytes, huffmanHeap).getBytes());
+        fileWriter.Write(nomFichierSortie, serialize.Encode(bytes, huffmanHeap));
     }
 
 
-    public static void Decompress()
-    {
+    public static void Decompress(String nomFichierEntre, String nomFichierSortie) throws IOException {
         var fileReader = new FileReader();
         var fileWriter = new FileWriter();
-        var deserialize = new Serialize();
+        var deserialize = new Deserialize();
 
+        var bytes = fileReader.Read(nomFichierEntre);
 
-
+        var value = deserialize.Deserialize(new String(bytes));
+        fileWriter.Write(nomFichierSortie, value);
     }
 }
 
