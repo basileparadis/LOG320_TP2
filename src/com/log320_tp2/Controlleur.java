@@ -19,9 +19,9 @@ public class Controlleur
         var serialize = new Serialize();
         var huffmanHeap = new HuffmanHeap();
 
-        var bytes = fileReader.Read(nomFichierEntre);
+        var chars = fileReader.Read(nomFichierEntre);
 
-        var tableFrequences = serialize.CreerTableFrequences(bytes);
+        var tableFrequences = serialize.CreerTableFrequences(chars);
 
         var queue = new PriorityQueue<Tuple<String, Integer>>((o1, o2) ->
         {
@@ -34,7 +34,7 @@ public class Controlleur
 
         huffmanHeap.Build(queue);
 
-        fileWriter.Write(nomFichierSortie, serialize.Encode(bytes, huffmanHeap));
+        fileWriter.Write(nomFichierSortie, serialize.Encode(chars, huffmanHeap));
     }
 
 
@@ -43,9 +43,14 @@ public class Controlleur
         var fileWriter = new FileWriter();
         var deserialize = new Deserialize();
 
-        var bytes = fileReader.Read(nomFichierEntre);
+        var chars = fileReader.Read(nomFichierEntre);
 
-        var value = deserialize.Deserialize(new String(bytes));
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (var character:chars) stringBuilder.append(character);
+
+        var value = deserialize.Deserialize(stringBuilder.toString());
+
         fileWriter.Write(nomFichierSortie, value);
     }
 }

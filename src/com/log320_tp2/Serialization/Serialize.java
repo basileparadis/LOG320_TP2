@@ -1,20 +1,20 @@
 package com.log320_tp2.Serialization;
 
 import com.log320_tp2.DataStructure.HuffmanHeap;
-import com.log320_tp2.DataStructure.Node;
 import com.log320_tp2.Helpers.Tuple;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Serialize
 {
-    public ArrayList<Tuple<String, Integer>> CreerTableFrequences(byte[] bytes)
+    public ArrayList<Tuple<String, Integer>> CreerTableFrequences(ArrayList<Character> chars)
     {
         var map = new HashMap<String, Tuple<String, Integer>>();
 
-        for (byte b : bytes)
+        for (var character : chars)
         {
-            var key = String.valueOf((char)b);
+            var key = character.toString();
 
             if(map.containsKey(key))
             {
@@ -29,7 +29,7 @@ public class Serialize
         return new ArrayList(map.values());
     }
 
-    public String Encode(byte[] bytes, HuffmanHeap heap)
+    public String Encode(ArrayList<Character> chars, HuffmanHeap heap)
     {
         var codex = heap.GetEncodedValues();
 
@@ -37,12 +37,11 @@ public class Serialize
 
         StringBuilder stringBuilder = new StringBuilder(header);
 
-        for (var bit: bytes)
+        for (var string: chars)
         {
-            char value = (char) bit;
-            var encodedValue = codex.get(String.valueOf(value));
+            var encodedValue = codex.get(string.toString());
 
-            stringBuilder.append(encodedValue + " ");
+            stringBuilder.append(encodedValue + "");
         }
 
         return stringBuilder.toString();

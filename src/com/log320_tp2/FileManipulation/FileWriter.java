@@ -13,5 +13,7 @@ public class FileWriter
         FileOutputStream fileOutputStream = new FileOutputStream(path);
 
         fileOutputStream.write(string.getBytes(StandardCharsets.UTF_8));
+
+        BinaryStdOut binaryStdOut = new
     }
 }

@@ -1,9 +1,7 @@
 package com.log320_tp2.DataStructure;
 
 import com.log320_tp2.Helpers.Tuple;
-import com.log320_tp2.Huffman;
 
-import java.awt.print.Printable;
 import java.util.*;
 
 public class HuffmanHeap
@@ -39,7 +37,7 @@ public class HuffmanHeap
 
         var emptyValue = new Tuple<String , Integer>("empty" , Integer.MAX_VALUE);
 
-        Heap.add(emptyValue);
+        Heap.add(0, emptyValue);
     }
 
     private void MaxHeapify(ArrayList<Tuple<String, Integer>> array, int i)
