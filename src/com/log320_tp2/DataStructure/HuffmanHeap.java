@@ -1,5 +1,6 @@
 package com.log320_tp2.DataStructure;
 
+import com.log320_tp2.Controlleur;
 import com.log320_tp2.Helpers.Tuple;
 
 import java.util.*;
@@ -8,7 +9,7 @@ public class HuffmanHeap
 {
     public ArrayList<Tuple<String, Integer>> Heap;
 
-    public void Build(PriorityQueue<Tuple<String, Integer>> queue)
+    public void Build(PriorityQueue<Tuple<String, Integer>> queue) throws NoSuchFieldException
     {
         Heap = new ArrayList<Tuple<String, Integer>>();
 
@@ -22,7 +23,7 @@ public class HuffmanHeap
 
             var emptyValue = new Tuple<String , Integer>("empty" ,valuePrior.Item2 + value.Item2);
 
-            Heap.add(emptyValue);
+            Insert(Heap, emptyValue);
 
             valuePrior = emptyValue;
         }
@@ -30,14 +31,31 @@ public class HuffmanHeap
         while (!queue.isEmpty())
         {
             var value = queue.remove();
-
-            Heap.add(value);
+            Insert(Heap, value);
         }
+    }
 
-        for (int i = Heap.size()/2; i >= 0; i--) {
-            MaxHeapify(Heap, i);
+    private void Insert(ArrayList<Tuple<String, Integer>> array, Tuple<String, Integer> value) throws NoSuchFieldException {
+        array.add(new Tuple<>(null, Integer.MAX_VALUE));
+
+        IncreaseKey(array, array.size()-1, value);
+    }
+
+    private void IncreaseKey(ArrayList<Tuple<String, Integer>> array, int i, Tuple<String, Integer> value) throws NoSuchFieldException {
+        if(value.Item2 < array.get(i).Item2)
+        {
+            array.set(i, value);
+            return;
         }
+        array.set(i, value);
 
+        while (i>1 && array.get(i/2).Item2 > array.get(i).Item2)
+        {
+            var temp = array.get(i);
+
+            array.set(i, array.get(i/2));
+            array.set(i/2, temp);
+        }
     }
 
     private void MaxHeapify(ArrayList<Tuple<String, Integer>> array, int i)
@@ -68,7 +86,7 @@ public class HuffmanHeap
 
     public HashMap<String, String> GetEncodedValues()
     {
-        var array = GetLeaves(0, "");
+        var array = GetLeaves(1, "");
 
         var map = new HashMap<String, String>();
 
@@ -82,25 +100,20 @@ public class HuffmanHeap
 
     private ArrayList<Tuple<String, String>> GetLeaves(int index, String binaryValue)
     {
-        if(index ==0) index++;
-
         var list = new ArrayList<Tuple<String, String>>();
 
-        var left = (2*index);
-        var right = 2*index+1;
+        var left = 2*index;
+        var right = (2*index)+1;
 
-        boolean hasLeftChild = left < Heap.size();
-        boolean hasRightChild = right < Heap.size();
-
-        if(index > Heap.size()) return list;
+        if(index-1 >= Heap.size()) return list;
 
         var value = Heap.get(index-1);
 
-        if(value != null && !value.Item1.equals("empty"))
+        if(!value.Item1.equals("empty"))
         {
             list.add(new Tuple<String, String>(value.Item1, binaryValue));
         }
-        else if(value !=null)
+        else
         {
             list.addAll(GetLeaves(left, binaryValue + "0"));
             list.addAll(GetLeaves(right, binaryValue + "1"));
