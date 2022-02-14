@@ -75,7 +75,7 @@ public class Serialize
             stringBuilder.append(value+ ":!:" +codex.get(value)+ "&!&");
         }
 
-        //stringBuilder.append(Controlleur.StaticStrings.ﾀ.toString());
+        stringBuilder.append("!&!");
 
         return stringBuilder.toString();
     }

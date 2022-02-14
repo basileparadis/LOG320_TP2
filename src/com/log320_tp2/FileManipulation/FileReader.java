@@ -31,7 +31,7 @@ public class FileReader
 
             chars.add(value);
 
-            if(String.valueOf(value).equals(Controlleur.StaticStrings.ﾀ.toString()))break;
+            if(String.valueOf(value).equals("!&!"))break;
         }
 
         return chars;
