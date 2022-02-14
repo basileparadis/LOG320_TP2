@@ -1,6 +1,6 @@
 package com.log320_tp2.Helpers;
 
-public class Tuple <K,T> implements ID
+public class Tuple <K,T>
 {
     public K Item1;
     public T Item2;
