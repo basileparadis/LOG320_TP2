@@ -37,8 +37,7 @@ public class Controlleur
         serialize.Encode(fileReader.Read(nomFichierEntre), codex, nomFichierSortie);
     }
 
-
-    public static String Compress(String stringInput) throws Exception
+    /*public static String Compress(String stringInput) throws Exception
     {
         var serialize = new Serialize();
         var huffmanHeap = new HuffmanHeap();
@@ -57,9 +56,8 @@ public class Controlleur
         huffmanHeap.Build(queue);
 
         return serialize.Encode(stringInput.getBytes(), huffmanHeap);
-    }
+    }*/
 
-    public static void Decompress(String nomFichierEntre, String nomFichierSortie) throws IOException {
     public static void Decompress(String nomFichierEntre, String nomFichierSortie) throws IOException
     {
         var fileReader = new FileReader();
@@ -77,12 +75,12 @@ public class Controlleur
 
     }
 
-    public static String Decompress(String stringInput) throws IOException {
+    /*public static String Decompress(String stringInput) throws IOException {
         var deserialize = new Deserialize();
 
         var bytes = stringInput.getBytes();
 
         return deserialize.Deserialize(new String(bytes));
-    }
+    }*/
 }
 
