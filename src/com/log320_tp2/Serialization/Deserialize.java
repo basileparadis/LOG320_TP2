@@ -1,52 +1,58 @@
 package com.log320_tp2.Serialization;
 
+import com.log320_tp2.FileManipulation.BitInputStream;
+import com.log320_tp2.FileManipulation.FileTextWriter;
 import com.log320_tp2.Helpers.Tuple;
-
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.HashMap;
 
 public class Deserialize
 {
-    public String Deserialize(ArrayList<Character> codes, String text)
+    public void Deserialize(BitInputStream codes, String text, String outPutFile) throws IOException
     {
         var codex = BuildCodex(text);
 
-        StringBuilder stringBuilder = new StringBuilder();
+        FileTextWriter fileWriter2 = new FileTextWriter(outPutFile);
+
         StringBuilder codeBuilder = new StringBuilder();
 
-        for (int i = 0; i < codex.Item2; i++)
-        {
-            var codeValue = codes.get(i).hashCode() == 0? 0 : 1;
+        int count = 0;
 
-            codeBuilder.append(codeValue);
+        while(count < codex.Item2)
+        {
+            var bite = codes.readBit();
+
+            if(bite == -1)
+                break;
+
+            codeBuilder.append(bite);
 
             if(codex.Item1.containsKey(codeBuilder.toString()))
             {
                 var value = codex.Item1.get(codeBuilder.toString());
-                stringBuilder.append(value);
+
+                fileWriter2.SingleWriteString(value);
 
                 codeBuilder = new StringBuilder();
             }
+            count++;
         }
-
-        return stringBuilder.toString();
     }
 
     private Tuple<HashMap<String, String>, Integer> BuildCodex(String header)
     {
-        var splitHeader = header.split(",!,");
+        var splitHeader = header.split("&!&");
         var codex = new HashMap<String, String>();
 
         for (int i = 0; i < splitHeader.length-1; i++)
         {
             var splitTuple = splitHeader[i].split(":!:");
+
             if(splitTuple.length>1)
                 codex.put(splitTuple[1], splitTuple[0]);
         }
 
-        var bytesWritten = splitHeader[splitHeader.length-1];
-
-        return new Tuple<>(codex, Integer.parseInt(bytesWritten));
+        return new Tuple(codex, Integer.parseInt(splitHeader[splitHeader.length-1]));
     }
 
 }
