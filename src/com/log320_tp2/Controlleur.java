@@ -2,11 +2,10 @@ package com.log320_tp2;
 
 import com.log320_tp2.DataStructure.HuffmanHeap;
 import com.log320_tp2.FileManipulation.FileReader;
-import com.log320_tp2.FileManipulation.FileWriter2;
+import com.log320_tp2.FileManipulation.FileTextWriter;
 import com.log320_tp2.Helpers.Tuple;
 import com.log320_tp2.Serialization.Deserialize;
 import com.log320_tp2.Serialization.Serialize;
-
 import java.io.IOException;
 import java.util.PriorityQueue;
 
@@ -15,13 +14,10 @@ public class Controlleur
     public static void Compress(String nomFichierEntre, String nomFichierSortie) throws Exception
     {
         var fileReader = new FileReader();
-        var fileWriter = new FileWriter2();
         var serialize = new Serialize();
         var huffmanHeap = new HuffmanHeap();
 
-        var chars = fileReader.Read(nomFichierEntre);
-
-        var tableFrequences = serialize.CreerTableFrequences(chars);
+        var tableFrequences = serialize.CreerTableFrequences(fileReader.Read(nomFichierEntre));
 
         var queue = new PriorityQueue<Tuple<String, Integer>>((o1, o2) ->
         {
@@ -36,13 +32,9 @@ public class Controlleur
 
         var codex = huffmanHeap.GetEncodedValues();
 
-        var encodedString = serialize.Encode(chars, codex);
+        FileTextWriter.Write(nomFichierSortie, serialize.SerializeHeader(codex));
 
-        int bytesWritten = encodedString.length();
-
-        fileWriter.WriteEncoded(nomFichierSortie, encodedString);
-
-        fileWriter.WriteAppendText(nomFichierSortie, serialize.SerializeHeader(codex, bytesWritten));
+        serialize.Encode(fileReader.Read(nomFichierEntre), codex, nomFichierSortie);
     }
 
 
@@ -68,11 +60,12 @@ public class Controlleur
     }
 
     public static void Decompress(String nomFichierEntre, String nomFichierSortie) throws IOException {
+    public static void Decompress(String nomFichierEntre, String nomFichierSortie) throws IOException
+    {
         var fileReader = new FileReader();
-        var fileWriter = new FileWriter2();
         var deserialize = new Deserialize();
 
-        var chars = fileReader.ReadBinary(nomFichierEntre);
+        var bitInputStream = fileReader.ReadBinary(nomFichierEntre);
 
         var codex = fileReader.ReadDecompress(nomFichierEntre);
 
@@ -80,9 +73,8 @@ public class Controlleur
 
         for (var code:codex) stringBuilder.append(code);
 
-        var value = deserialize.Deserialize(chars, stringBuilder.toString());
+        deserialize.Deserialize(bitInputStream, stringBuilder.toString(), nomFichierSortie);
 
-        fileWriter.WriteText(nomFichierSortie, value);
     }
 
     public static String Decompress(String stringInput) throws IOException {
