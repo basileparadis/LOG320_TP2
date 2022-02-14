@@ -8,6 +8,43 @@ import java.util.HashMap;
 
 public class Deserialize
 {
+    private boolean GetToText(BitInputStream codes, StringBuilder codeBuilder)
+    {
+        boolean check = false;
+
+        StringBuilder middleCheck = new StringBuilder();
+
+        for (int i = 0; i <= 100; i++) middleCheck.append(1);
+
+        char[] toFind = ("101"+middleCheck.toString() +"101").toCharArray();
+
+        while (true)
+        {
+            var bite = codes.readBit();
+
+            if(bite == -1)
+                return false;
+
+            codeBuilder.append(bite);
+
+            check = true;
+
+            for (int i = 0; i < codeBuilder.length(); i++) {
+                if(!(codeBuilder.charAt(i) == toFind[i]))
+                {
+                    check = false;
+                    codeBuilder = new StringBuilder();
+                    break;
+                }
+            }
+            if (check && codeBuilder.length() == toFind.length)
+            {
+                return true;
+            }
+        }
+
+    }
+
     public void Deserialize(BitInputStream codes, String text, String outPutFile) throws IOException
     {
         var codex = BuildCodex(text);
@@ -16,9 +53,14 @@ public class Deserialize
 
         StringBuilder codeBuilder = new StringBuilder();
 
-        int count = 0;
+        if(GetToText(codes, codeBuilder))
+        {
+           codeBuilder = new StringBuilder();
+        }
+        else
+            throw new IOException();
 
-        while(count < codex.Item2)
+        while(true)
         {
             var bite = codes.readBit();
 
@@ -27,19 +69,18 @@ public class Deserialize
 
             codeBuilder.append(bite);
 
-            if(codex.Item1.containsKey(codeBuilder.toString()))
+            if(codex.containsKey(codeBuilder.toString()))
             {
-                var value = codex.Item1.get(codeBuilder.toString());
+                var value = codex.get(codeBuilder.toString());
 
                 fileWriter2.SingleWriteString(value);
 
                 codeBuilder = new StringBuilder();
             }
-            count++;
         }
     }
 
-    private Tuple<HashMap<String, String>, Integer> BuildCodex(String header)
+    private HashMap<String, String> BuildCodex(String header)
     {
         var splitHeader = header.split("&!&");
         var codex = new HashMap<String, String>();
@@ -52,7 +93,7 @@ public class Deserialize
                 codex.put(splitTuple[1], splitTuple[0]);
         }
 
-        return new Tuple(codex, Integer.parseInt(splitHeader[splitHeader.length-1]));
+        return codex;
     }
 
 }

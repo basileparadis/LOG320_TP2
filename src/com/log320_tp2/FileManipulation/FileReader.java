@@ -25,16 +25,13 @@ public class FileReader
 
         var chars = new ArrayList<Character>();
 
-        boolean reachedCodex = false;
-
         while (buffReader.ready())
         {
             var value = (char)buffReader.read();
 
-            if(reachedCodex)chars.add(value);
+            chars.add(value);
 
-            if(String.valueOf(value).equals(Controlleur.StaticStrings.ﾀ.toString()))
-                reachedCodex = true;
+            if(String.valueOf(value).equals(Controlleur.StaticStrings.ﾀ.toString()))break;
         }
 
         return chars;

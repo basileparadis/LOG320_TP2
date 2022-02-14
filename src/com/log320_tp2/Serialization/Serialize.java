@@ -32,11 +32,22 @@ public class Serialize
         return new ArrayList(map.values());
     }
 
-    public int Encode(BufferedReader bufferedReader, HashMap<String, String> codex, String outputFile) throws IOException
+    private void TextStartPointEncoding(FileBinaryWriter fileWriter) throws IOException
+    {
+        fileWriter.SingleWriteEncoded(1);
+        fileWriter.SingleWriteEncoded(0);
+        fileWriter.SingleWriteEncoded(1);
+        for (int i = 0; i <= 100; i++) fileWriter.SingleWriteEncoded(1);
+        fileWriter.SingleWriteEncoded(1);
+        fileWriter.SingleWriteEncoded(0);
+        fileWriter.SingleWriteEncoded(1);
+    }
+
+    public void Encode(BufferedReader bufferedReader, HashMap<String, String> codex, String outputFile) throws IOException
     {
         FileBinaryWriter fileWriter = new FileBinaryWriter(outputFile);
 
-        int bytesWritten = 0;
+        TextStartPointEncoding(fileWriter);
 
         while(bufferedReader.ready())
         {
@@ -49,28 +60,22 @@ public class Serialize
                 var value = Integer.parseInt(String.valueOf(character));
 
                 fileWriter.SingleWriteEncoded(value);
-
-                bytesWritten++;
             }
         }
 
         fileWriter.Close();
-
-        return bytesWritten;
     }
 
-    public String SerializeHeader(HashMap<String, String> codex, int bytesWritten)
+    public String SerializeHeader(HashMap<String, String> codex)
     {
         StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append(Controlleur.StaticStrings.ﾀ.toString());
 
         for (var value: codex.keySet())
         {
             stringBuilder.append(value+ ":!:" +codex.get(value)+ "&!&");
         }
 
-        stringBuilder.append(bytesWritten);
+        //stringBuilder.append(Controlleur.StaticStrings.ﾀ.toString());
 
         return stringBuilder.toString();
     }

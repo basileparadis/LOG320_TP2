@@ -19,7 +19,7 @@ public class FileTextWriter
 
     public static void Write(String path, String string) throws IOException
     {
-        var bufferedWriter = new BufferedWriter(new FileWriter(path, true));
+        var bufferedWriter = new BufferedWriter(new FileWriter(path, false));
         bufferedWriter.write(string);
         bufferedWriter.flush();
         bufferedWriter.close();

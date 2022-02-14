@@ -37,9 +37,9 @@ public class Controlleur
 
         var codex = huffmanHeap.GetEncodedValues();
 
-        int bytesWritten = serialize.Encode(fileReader.Read(nomFichierEntre), codex, nomFichierSortie);
+        FileTextWriter.Write(nomFichierSortie, serialize.SerializeHeader(codex));
 
-        FileTextWriter.Write(nomFichierSortie, serialize.SerializeHeader(codex, bytesWritten));
+        serialize.Encode(fileReader.Read(nomFichierEntre), codex, nomFichierSortie);
     }
 
 

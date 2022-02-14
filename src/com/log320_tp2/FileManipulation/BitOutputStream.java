@@ -28,7 +28,7 @@ public class BitOutputStream {
     // post: creates a BitOutputStream sending output to the file
     public BitOutputStream(String file) {
         try {
-            output = new FileOutputStream(file, false);
+            output = new FileOutputStream(file, true);
         } catch (IOException e) {
             throw new RuntimeException(e.toString());
         }
