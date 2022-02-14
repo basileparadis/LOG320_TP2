@@ -8,6 +8,41 @@ import java.util.HashMap;
 
 public class Deserialize
 {
+    public void Deserialize(BitInputStream codes, String text, String outPutFile) throws IOException
+    {
+        var codex = BuildCodex(text);
+
+        FileTextWriter fileWriter2 = new FileTextWriter(outPutFile);
+
+        StringBuilder codeBuilder = new StringBuilder();
+
+        if(GetToText(codes, codeBuilder))
+        {
+           codeBuilder = new StringBuilder();
+        }
+        else
+            throw new IOException();
+
+        while(true)
+        {
+            var bite = codes.readBit();
+
+            if(bite == -1)
+                break;
+
+            codeBuilder.append(bite);
+
+            if(codex.containsKey(codeBuilder.toString()))
+            {
+                var value = codex.get(codeBuilder.toString());
+
+                fileWriter2.SingleWriteString(value);
+
+                codeBuilder = new StringBuilder();
+            }
+        }
+    }
+
     private boolean GetToText(BitInputStream codes, StringBuilder codeBuilder)
     {
         boolean check = false;
@@ -43,41 +78,6 @@ public class Deserialize
             }
         }
 
-    }
-
-    public void Deserialize(BitInputStream codes, String text, String outPutFile) throws IOException
-    {
-        var codex = BuildCodex(text);
-
-        FileTextWriter fileWriter2 = new FileTextWriter(outPutFile);
-
-        StringBuilder codeBuilder = new StringBuilder();
-
-        if(GetToText(codes, codeBuilder))
-        {
-           codeBuilder = new StringBuilder();
-        }
-        else
-            throw new IOException();
-
-        while(true)
-        {
-            var bite = codes.readBit();
-
-            if(bite == -1)
-                break;
-
-            codeBuilder.append(bite);
-
-            if(codex.containsKey(codeBuilder.toString()))
-            {
-                var value = codex.get(codeBuilder.toString());
-
-                fileWriter2.SingleWriteString(value);
-
-                codeBuilder = new StringBuilder();
-            }
-        }
     }
 
     private HashMap<String, String> BuildCodex(String header)

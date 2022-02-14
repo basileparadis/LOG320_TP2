@@ -9,9 +9,9 @@ public class Main
     public static void main(String[] args) throws Exception {
         Huffman huffman = new Huffman();
 
-        Compress(huffman);
+        //Compress(huffman);
 
-        DeCompress(huffman);
+        //DeCompress(huffman);
     }
 
     public static void Compress(Huffman huffman) throws Exception {

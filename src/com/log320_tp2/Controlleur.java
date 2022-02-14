@@ -11,11 +11,6 @@ import java.util.PriorityQueue;
 
 public class Controlleur
 {
-    public enum StaticStrings
-    {
-        ﾀ
-    }
-
     public static void Compress(String nomFichierEntre, String nomFichierSortie) throws Exception
     {
         var fileReader = new FileReader();
